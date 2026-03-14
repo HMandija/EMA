@@ -1,27 +1,34 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
+
 const Contact = () => {
   const form = useRef();
   const [sent, setSent] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const sendEmail = (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Këtu do vendosësh kodet e tua nga emailjs.com
     emailjs
       .sendForm(
         "service_mivu2ii",
         "template_mchespq",
         form.current,
-        "YOUR_PUBLIC_KEY",
+        "sjWiSNRZiEcmuW6BS", // SHËNIM: Zëvendësoje me çelësin që do marrësh te Account
       )
       .then(
         () => {
           setSent(true);
+          setLoading(false);
           form.current.reset();
+          // Butoni kthehet në gjendje normale pas 5 sekondash
+          setTimeout(() => setSent(false), 5000);
         },
         (error) => {
+          setLoading(false);
+          alert("Something went wrong, please try again.");
           console.log(error.text);
         },
       );
@@ -38,7 +45,7 @@ const Contact = () => {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
-        {/* Kolona 1: Të dhënat e kontaktit */}
+        {/* Kolona 1: Info */}
         <div className="space-y-12">
           <div className="space-y-4">
             <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400">
@@ -79,42 +86,43 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Kolona 2: Forma e Kontaktit */}
-        <div>
+        {/* Kolona 2: Forma */}
+        <div className="relative z-10">
           <form ref={form} onSubmit={sendEmail} className="space-y-8">
             <div className="border-b border-gray-200 py-2">
-              {/* name="name" përputhet me {{name}} në EmailJS */}
               <input
                 type="text"
                 name="name"
                 placeholder="NAME"
                 required
-                className="w-full bg-transparent outline-none text-[11px] tracking-widest uppercase"
+                className="w-full bg-transparent outline-none text-[11px] tracking-widest normal-case placeholder:uppercase"
               />
             </div>
             <div className="border-b border-gray-200 py-2">
-              {/* name="email" përputhet me {{email}} në EmailJS */}
               <input
                 type="email"
                 name="email"
                 placeholder="EMAIL"
                 required
-                className="w-full bg-transparent outline-none text-[11px] tracking-widest uppercase"
+                className="w-full bg-transparent outline-none text-[11px] tracking-widest normal-case placeholder:uppercase"
               />
             </div>
             <div className="border-b border-gray-200 py-2">
-              {/* name="message" përputhet me {{message}} në EmailJS */}
               <textarea
                 name="message"
                 placeholder="MESSAGE"
                 rows="4"
                 required
-                className="w-full bg-transparent outline-none text-[11px] tracking-widest uppercase resize-none"
+                className="w-full bg-transparent outline-none text-[11px] tracking-widest normal-case placeholder:uppercase resize-none"
               ></textarea>
             </div>
 
-            <button type="submit" className="...">
-              {sent ? "MESSAGE SENT" : "SEND MESSAGE"}
+            <button
+              type="submit"
+              disabled={loading || sent}
+              className="text-[11px] tracking-[0.3em] uppercase hover:text-gray-500 transition-colors disabled:text-gray-400 cursor-pointer block mt-4"
+            >
+              {loading ? "SENDING..." : sent ? "MESSAGE SENT" : "SEND MESSAGE"}
             </button>
           </form>
         </div>
