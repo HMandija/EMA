@@ -1,31 +1,40 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Footer from "./components/Footer";
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import WelcomePage from "./components/WelcomePage";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Projects from "./pages/Projects";
+import Team from "./pages/Team";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
-import ProjectDetail from "./pages/ProjectDetail";
+
+// Importo Team dhe të tjerat...
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
   return (
-    <Router>
-      <div className="min-h-screen bg-white flex flex-col">
-        <Navbar />
-
-        {/* Content Section */}
-        <main className="flex-grow pt-32 px-4 md:px-12 lg:px-24">
-          <Routes>
-            <Route path="/" element={<Projects />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/project/:slug" element={<ProjectDetail />} />
-          </Routes>
-        </main>
-
-        {/* Footer Section - Jashtë main për kontroll më të mirë */}
-        <Footer />
-      </div>
-    </Router>
+    <div className="dark:bg-black min-h-screen transition-colors duration-500">
+      <AnimatePresence mode="wait">
+        {isLoading ? (
+          <WelcomePage key="welcome" onComplete={() => setIsLoading(false)} />
+        ) : (
+          <motion.div
+            key="content"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1.5 }}
+          >
+            <Navbar />
+            <main className="pt-20">
+              {/* Këtu vendos Routes e tua */}
+              <Projects />
+            </main>
+            <Footer />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
