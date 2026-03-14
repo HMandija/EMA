@@ -219,7 +219,7 @@ import p6 from "../assets/projects/ProjectEnergos/ProjectEnergos6.jpg";
 
 import r1 from "../assets/projects/Residence/Residence1.jpg";
 import r2 from "../assets/projects/Residence/Residence2.jpg";
-import r3 from "../assets/projects/Residence/Residence3.JPG";
+import r3 from "../assets/projects/Residence/Residence3.jpg";
 import r4 from "../assets/projects/Residence/Residence4.jpg";
 import r5 from "../assets/projects/Residence/Residence5.jpg";
 import r6 from "../assets/projects/Residence/Residence6.jpg";
