@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import WelcomePage from "./components/WelcomePage";
 import Navbar from "./components/Navbar";
@@ -7,14 +8,35 @@ import Projects from "./pages/Projects";
 import Team from "./pages/Team";
 import Profile from "./pages/Profile";
 import Contact from "./pages/Contact";
-
-// Importo Team dhe të tjerat...
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
 
+  // Menaxhimi i temës që zgjidh error-in në App.jsx:17
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"),
+  );
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+
   return (
-    <div className="dark:bg-black min-h-screen transition-colors duration-500">
+    // Sfondi i zi fiks gjatë loading-ut për të hequr "flash-in" e bardhë
+    <div
+      className={`${isLoading ? "bg-black" : theme === "dark" ? "bg-black text-white" : "bg-white text-black"} min-h-screen transition-colors duration-500`}
+    >
       <AnimatePresence mode="wait">
         {isLoading ? (
           <WelcomePage key="welcome" onComplete={() => setIsLoading(false)} />
@@ -23,14 +45,22 @@ function App() {
             key="content"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1.5 }}
+            transition={{ duration: 1.2 }}
           >
-            <Navbar />
-            <main className="pt-20">
-              {/* Këtu vendos Routes e tua */}
-              <Projects />
+            {/* Kalojmë temën si props te Navbar */}
+            <Navbar theme={theme} toggleTheme={toggleTheme} />
+
+            <main className="min-h-screen pt-64 md:pt-72">
+              <Routes>
+                <Route path="/" element={<Projects />} />
+                <Route path="/team" element={<Team />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/project/:slug" element={<ProjectDetail />} />
+              </Routes>
             </main>
-            <Footer />
+
+            <Footer theme={theme} />
           </motion.div>
         )}
       </AnimatePresence>

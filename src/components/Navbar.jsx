@@ -1,31 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiSun, FiMoon } from "react-icons/fi";
-import logo from "../assets/logo-ema.png";
+import logo from "../assets/logo-ema.png"; //
 
-const Navbar = () => {
+const Navbar = ({ theme, toggleTheme }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [theme, setTheme] = useState(
-    localStorage.getItem("theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light"),
-  );
 
-  useEffect(() => {
-    if (theme === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-    localStorage.setItem("theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
-
+  // Kontrolli i fshehjes së Navbar gjatë scroll-it
   useEffect(() => {
     const controlNavbar = () => {
       if (window.scrollY > lastScrollY && window.scrollY > 100) {
@@ -41,60 +23,68 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 
       ${isVisible ? "translate-y-0" : "-translate-y-full"} 
-      ${theme === "dark" ? "bg-black/90 backdrop-blur-md" : "bg-white/90 backdrop-blur-md"}`}
+      ${theme === "dark" ? "bg-black/90 border-white/5" : "bg-white/90 border-black/5"} 
+      backdrop-blur-xl border-b`}
     >
-      {/* Ndryshimi i strukturës: flex-col për mobile, flex-row për desktop */}
-      <div className="flex flex-col md:flex-row justify-between items-center py-4 md:py-6 px-4 md:px-12 lg:px-16 gap-4 md:gap-0">
-        {/* RRESHTI 1: LOGOJA */}
-        <Link to="/" className="flex items-center">
+      <div className="flex flex-col items-center py-6 px-4 md:px-12 lg:px-16 gap-6">
+        {/* Grupi i Logos dhe Tekstit Poshtë */}
+        <Link
+          to="/"
+          className="flex flex-col items-center group transition-transform hover:scale-105"
+        >
           <img
             src={logo}
-            alt="EMA Logo"
-            className={`h-18 md:h-20 w-auto transition-all duration-300 ${
-              theme === "dark" ? "brightness-0 invert" : ""
+            alt="EMA"
+            className={`h-12 md:h-16 w-auto transition-all duration-500 ${
+              theme === "dark" ? "brightness-0 invert" : "brightness-100"
             }`}
           />
+          <span
+            className={`text-[8px] md:text-[10px] uppercase tracking-[0.5em] mt-3 font-light ${
+              theme === "dark" ? "text-gray-400" : "text-gray-500"
+            }`}
+          >
+            Architecture & Design
+          </span>
         </Link>
-
-        {/* RRESHTI 2: NAVIGIMI */}
-        <nav className="flex items-center space-x-6 md:space-x-12 text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-medium">
+        <nav className="flex items-center space-x-6 md:space-x-12 text-[9px] md:text-[11px] uppercase tracking-[0.3em] font-light">
           <Link
             to="/"
-            className="text-gray-500 hover:text-black dark:hover:gold-shimmer transition-colors"
+            className={`${theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors`}
           >
             Projects
           </Link>
           <Link
+            to="/team"
+            className={`${theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors`}
+          >
+            Team
+          </Link>
+          <Link
             to="/profile"
-            className="text-gray-500 hover:text-black dark:hover:gold-shimmer transition-colors"
+            className={`${theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors`}
           >
             About
           </Link>
           <Link
             to="/contact"
-            className="text-gray-500 hover:text-black dark:hover:gold-shimmer transition-colors"
+            className={`${theme === "dark" ? "text-gray-400 hover:text-white" : "text-gray-600 hover:text-black"} transition-colors`}
           >
             Contact
           </Link>
 
-          <Link
-            to="/team"
-            className="text-gray-500 hover:text-black dark:hover:gold-shimmer transition-colors"
-          >
-            Team
-          </Link>
-
+          {/* Butoni i Temës */}
           <button
             onClick={toggleTheme}
-            className="p-2 transition-transform hover:scale-110"
+            className="ml-4 p-2 transition-transform hover:scale-110 active:scale-95"
             aria-label="Toggle Theme"
           >
             {theme === "light" ? (
-              <FiMoon size={18} className="text-gray-500" />
+              <FiMoon size={18} className="text-black" />
             ) : (
-              <FiSun size={18} className="gold-shimmer" />
+              <FiSun size={18} className="text-yellow-500 gold-shimmer" />
             )}
           </button>
         </nav>

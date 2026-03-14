@@ -27,11 +27,13 @@ const Projects = () => {
                 />
               </div>
 
-              <div className="mt-4">
-                <h2 className="text-[12px] font-semibold uppercase tracking-[0.1em] text-gray-900 dark:gold-shimmer">
+              <div className="mt-6 text-center md:text-left">
+                {" "}
+                {/* Qendërzo tekstin në mobile */}
+                <h2 className="text-[11px] font-medium uppercase tracking-[0.2em] text-white dark:gold-shimmer">
                   {project.title}
                 </h2>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1 dark:text-gray-400">
+                <p className="text-[9px] text-gray-500 uppercase tracking-[0.15em] mt-2">
                   {project.location} — {project.category}
                 </p>
               </div>
