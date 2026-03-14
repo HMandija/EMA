@@ -39,3 +39,92 @@ body {
 .project-image-container img:hover {
   transform: scale(1.05); /* Efekt zmadhimi kur kalon mausin */
 }
+
+/* Tranzicion i butë për ndryshimin e temës në të gjithë faqen */
+body {
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
+}
+
+/* Kur klasa .dark shtohet te <html>, e gjithë faqja nxihet */
+.dark body {
+  background-color: #050505; /* E zezë e thellë */
+  color: #ffffff;
+}
+
+/* Animacioni për vezullimin e artë (Gold Glow) */
+@keyframes goldGlow {
+  0% {
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+    color: #d4af37;
+  }
+  50% {
+    text-shadow:
+      0 0 15px rgba(212, 175, 55, 0.8),
+      0 0 20px rgba(212, 175, 55, 0.4);
+    color: #f1d37e;
+  }
+  100% {
+    text-shadow: 0 0 5px rgba(212, 175, 55, 0.4);
+    color: #d4af37;
+  }
+}
+
+/* Klasa që do përdorim për germat dhe titujt në Dark Mode */
+.dark .gold-shimmer {
+  animation: goldGlow 3s infinite ease-in-out;
+}
+
+/* Kornizat e projekteve në Dark Mode */
+.dark .project-card-custom {
+  border-color: rgba(212, 175, 55, 0.2) !important;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.05);
+  transition: all 0.4s ease;
+}
+
+.dark .project-card-custom:hover {
+  border-color: rgba(212, 175, 55, 0.8) !important;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+}
+
+/* Kjo kap të gjithë faqen kur klasa dark është aktive */
+/* Kjo siguron që çdo pjesë e faqes, përfshirë footer-in, të nxihet */
+html.dark,
+html.dark body,
+html.dark #root,
+html.dark footer,
+html.dark header {
+  background-color: #050505 !important;
+  color: #ffffff !important;
+  border-color: rgba(212, 175, 55, 0.1) !important;
+}
+
+/* Hiq sfonde të bardha të mundshme që bllokojnë nxirjen */
+html.dark .bg-white,
+html.dark .bg-gray-50 {
+  background-color: transparent !important;
+}
+
+/* Animacioni Gold */
+@keyframes goldGlow {
+  0% {
+    text-shadow: 0 0 2px #d4af37;
+    color: #d4af37;
+  }
+  50% {
+    text-shadow:
+      0 0 10px #f1d37e,
+      0 0 20px #d4af37;
+    color: #f1d37e;
+  }
+  100% {
+    text-shadow: 0 0 2px #d4af37;
+    color: #d4af37;
+  }
+}
+
+/* Klasa gold që do të detyrojmë te germat */
+.dark .gold-shimmer {
+  animation: goldGlow 3s infinite ease-in-out !important;
+}

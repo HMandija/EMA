@@ -19,7 +19,7 @@ const Projects = () => {
               to={`/project/${project.slug}`}
               className="group block cursor-pointer"
             >
-              <div className="overflow-hidden bg-[#f4f4f4] aspect-[4/3]">
+              <div className="overflow-hidden bg-[#f4f4f4] aspect-[4/3] dark:project-card-custom">
                 <img
                   src={project.imageUrl}
                   alt={project.title}
@@ -28,10 +28,10 @@ const Projects = () => {
               </div>
 
               <div className="mt-4">
-                <h2 className="text-[12px] font-semibold uppercase tracking-[0.1em] text-gray-900">
+                <h2 className="text-[12px] font-semibold uppercase tracking-[0.1em] text-gray-900 dark:gold-shimmer">
                   {project.title}
                 </h2>
-                <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1">
+                <p className="text-[10px] text-gray-500 uppercase tracking-wider mt-1 dark:text-gray-400">
                   {project.location} — {project.category}
                 </p>
               </div>
