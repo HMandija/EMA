@@ -13,7 +13,7 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_mivu2ii",
+        "service_jsk0ggs",
         "template_mchespq",
         form.current,
         "sjWiSNRZiEcmuW6BS", // SHËNIM: Zëvendësoje me çelësin që do marrësh te Account
