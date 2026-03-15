@@ -50,7 +50,7 @@ function App() {
             {/* Kalojmë temën si props te Navbar */}
             <Navbar theme={theme} toggleTheme={toggleTheme} />
 
-            <main className="min-h-screen pt-64 md:pt-72">
+            <main className="min-h-screen pt-32 md:pt-40">
               <Routes>
                 <Route path="/" element={<Projects />} />
                 <Route path="/team" element={<Team />} />

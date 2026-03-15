@@ -1,19 +1,23 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // Shto useNavigate
+import { useParams, useNavigate } from "react-router-dom";
 import { projectsData } from "../data/projects";
 import { motion, AnimatePresence } from "framer-motion";
 
 const ProjectDetail = () => {
   const { slug } = useParams();
-  const navigate = useNavigate(); // Për të ndryshuar faqen direkt
+  const navigate = useNavigate();
   const project = projectsData.find((p) => p.slug === slug);
 
   const [currentIndex, setCurrentIndex] = useState(null);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
 
-  if (!project) return <div>Project not found</div>;
+  if (!project)
+    return (
+      <div className="pt-40 text-center uppercase tracking-widest">
+        Project not found
+      </div>
+    );
 
-  // Marrim kategoritë unike
   const categories = [
     "All Projects",
     ...new Set(projectsData.map((p) => p.category)),
@@ -22,9 +26,8 @@ const ProjectDetail = () => {
   const handleCategorySelect = (cat) => {
     setIsCategoryOpen(false);
     if (cat === "All Projects") {
-      navigate("/"); // Kthehet te lista e plotë
+      navigate("/");
     } else {
-      // Gjen projektin e parë të asaj kategorie dhe shkon tek ai
       const firstInCat = projectsData.find((p) => p.category === cat);
       if (firstInCat) navigate(`/project/${firstInCat.slug}`);
     }
@@ -32,7 +35,7 @@ const ProjectDetail = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-20">
-      {/* Dropdown-i i Kategorive i shtuar këtu */}
+      {/* Dropdown Explore */}
       <div className="relative mb-12 flex justify-start">
         <div className="w-56">
           <button
@@ -70,8 +73,8 @@ const ProjectDetail = () => {
         </div>
       </div>
 
-      {/* Titulli dhe Info */}
-      <div className="mb-16">
+      {/* Titulli kryesor */}
+      <div className="mb-12">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -79,12 +82,73 @@ const ProjectDetail = () => {
         >
           {project.title}
         </motion.h1>
-        <p className="text-gray-400 uppercase text-[10px] tracking-[0.3em]">
-          {project.location}
-        </p>
       </div>
 
-      {/* Grid e Imazheve me Hover të ri "të butë" */}
+      {/* DETAJET E PROJEKTIT (Bazuar në dokumentin tuaj) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20 border-t border-gray-100 dark:border-zinc-800 pt-10">
+        {/* Përshkrimi (Description) */}
+        <div className="md:col-span-2">
+          <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-6">
+            About the Project
+          </h3>
+          <p className="text-[11px] leading-relaxed uppercase tracking-[0.2em] text-gray-600 dark:text-gray-300">
+            {project.description}
+          </p>
+        </div>
+
+        {/* Paneli i Informacionit (Status, Role, Location, Credits) */}
+        <div className="grid grid-cols-2 md:grid-cols-1 gap-8 border-l border-gray-50 dark:border-zinc-900 md:pl-8">
+          {/* Statusi i Projektit */}
+          {project.status && (
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">
+                Status
+              </h3>
+              <p className="text-[10px] uppercase tracking-widest">
+                {project.status}
+              </p>
+            </div>
+          )}
+
+          {/* Vendndodhja */}
+          {project.location && (
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">
+                Location
+              </h3>
+              <p className="text-[10px] uppercase tracking-widest">
+                {project.location}
+              </p>
+            </div>
+          )}
+
+          {/* Roli juaj në projekt */}
+          {project.role && (
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">
+                My Role
+              </h3>
+              <p className="text-[10px] uppercase tracking-widest leading-relaxed">
+                {project.role}
+              </p>
+            </div>
+          )}
+
+          {/* Kreditet Shtesë */}
+          {project.additionalCredits && (
+            <div>
+              <h3 className="text-[10px] uppercase tracking-[0.3em] text-gray-400 mb-1">
+                Additional Credits
+              </h3>
+              <p className="text-[10px] uppercase tracking-widest">
+                {project.additionalCredits}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Galeria e Imazheve */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {project.gallery.map((img, index) => (
           <motion.div
@@ -92,18 +156,16 @@ const ProjectDetail = () => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="relative group overflow-hidden bg-stone-100 dark:bg-zinc-900 cursor-pointer"
+            className="relative group overflow-hidden bg-stone-50 dark:bg-zinc-900 cursor-pointer"
             onClick={() => setCurrentIndex(index)}
           >
             <img
               src={img}
               alt={`${project.title} ${index}`}
-              className="w-full h-full object-cover grayscale opacity-90 transition-all duration-[1500ms] cubic-bezier(0.4, 0, 0.2, 1) group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-[1.03]"
+              className="w-full h-full object-cover grayscale opacity-90 transition-all duration-[1500ms] group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-[1.03]"
             />
-
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-700" />
-
-            <button className="absolute bottom-6 right-6 p-3 bg-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
+            <div className="absolute bottom-6 right-6 p-3 bg-white/10 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-500">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -118,26 +180,25 @@ const ProjectDetail = () => {
                   d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15"
                 />
               </svg>
-            </button>
+            </div>
           </motion.div>
         ))}
       </div>
 
+      {/* Lightbox Fullscreen me Navigim */}
       <AnimatePresence>
         {currentIndex !== null && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black flex items-center justify-center"
-            onClick={() => setCurrentIndex(null)} // Kjo mbyll expand-in
+            className="fixed inset-0 z-[100] bg-black flex items-center justify-center p-4"
+            onClick={() => setCurrentIndex(null)}
           >
-            {/* Butoni Close */}
             <button className="absolute top-10 right-10 text-white text-[10px] tracking-widest uppercase z-[110]">
               Close
             </button>
 
-            {/* Navigimi: Prev */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -147,7 +208,7 @@ const ProjectDetail = () => {
                     project.gallery.length,
                 );
               }}
-              className="absolute left-10 text-white/50 hover:text-white z-[110]"
+              className="absolute left-4 md:left-10 text-white/50 hover:text-white z-[110]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -165,23 +226,21 @@ const ProjectDetail = () => {
               </svg>
             </button>
 
-            {/* Imazhi në Fullscreen */}
             <motion.img
               key={currentIndex}
               src={project.gallery[currentIndex]}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="max-w-[90%] max-h-[90vh] object-contain"
+              className="max-w-full max-h-[90vh] object-contain"
               onClick={(e) => e.stopPropagation()}
             />
 
-            {/* Navigimi: Next */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setCurrentIndex((prev) => (prev + 1) % project.gallery.length);
               }}
-              className="absolute right-10 text-white/50 hover:text-white z-[110]"
+              className="absolute right-4 md:right-10 text-white/50 hover:text-white z-[110]"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
