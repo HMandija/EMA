@@ -13,17 +13,16 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_jsk0ggs",
-        "template_mchespq",
+        import.meta.env.VITE_EMAILJS_SERVICE_ID, // Thërret Service ID nga .env
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Thërret Template ID nga .env
         form.current,
-        "sjWiSNRZiEcmuW6BS", // SHËNIM: Zëvendësoje me çelësin që do marrësh te Account
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY, // Thërret Public Key nga .env
       )
       .then(
         () => {
           setSent(true);
           setLoading(false);
           form.current.reset();
-          // Butoni kthehet në gjendje normale pas 5 sekondash
           setTimeout(() => setSent(false), 5000);
         },
         (error) => {
@@ -33,7 +32,6 @@ const Contact = () => {
         },
       );
   };
-
   return (
     <motion.div
       initial={{ opacity: 0 }}
