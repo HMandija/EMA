@@ -128,3 +128,17 @@ html.dark .bg-gray-50 {
 .dark .gold-shimmer {
   animation: goldGlow 3s infinite ease-in-out !important;
 }
+
+/* ─── Admin Panel Utility Classes ─────────────────────────────── */
+.label-admin {
+  @apply block text-[9px] uppercase tracking-[0.2em] text-zinc-500 mb-1.5;
+}
+
+.input-admin {
+  @apply w-full bg-transparent border-b border-zinc-700 focus:border-zinc-400 outline-none py-2 text-white text-[12px] transition-colors duration-200;
+}
+
+select.input-admin option {
+  background-color: #111;
+  color: #fff;
+}

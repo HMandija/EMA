@@ -1,23 +1,57 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import { projectsData as projects } from "../data/projects";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "../firebase";
+
 const Projects = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isOpen, setIsOpen] = useState(false);
 
-  // 1. Marrim të gjitha kategoritë unike nga skedari projects.js
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const snap = await getDocs(
+          query(collection(db, "projects"), orderBy("createdAt", "desc"))
+        );
+        setProjects(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+      } catch (err) {
+        console.error("Error fetching projects:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProjects();
+  }, []);
+
   const categories = ["All", ...new Set(projects.map((p) => p.category))];
 
-  // 2. Filtrojmë projektet në bazë të zgjedhjes
   const filteredProjects =
     selectedCategory === "All"
       ? projects
       : projects.filter((p) => p.category === selectedCategory);
 
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {[...Array(6)].map((_, i) => (
+            <div key={i} className="animate-pulse">
+              <div className="aspect-[4/3] bg-gray-100 dark:bg-zinc-900" />
+              <div className="mt-4 h-3 bg-gray-100 dark:bg-zinc-900 w-2/3" />
+              <div className="mt-2 h-2 bg-gray-100 dark:bg-zinc-900 w-1/3" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-10">
-      {/* Box-i i Kategorive (Dropdown) */}
+      {/* Dropdown Kategorive */}
       <div className="relative mb-12 flex justify-end">
         <div className="w-48">
           <button
@@ -58,7 +92,7 @@ const Projects = () => {
         </div>
       </div>
 
-      {/* Grid e Projekteve */}
+      {/* Grid Projekteve */}
       <motion.div
         layout
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -79,6 +113,7 @@ const Projects = () => {
                     src={project.imageUrl}
                     alt={project.title}
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
+                    loading="lazy"
                   />
                 </div>
                 <div className="mt-4 flex justify-between items-start">
@@ -99,6 +134,12 @@ const Projects = () => {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {projects.length === 0 && !loading && (
+        <p className="text-center text-gray-400 text-[10px] uppercase tracking-widest py-20">
+          Nuk ka projekte akoma.
+        </p>
+      )}
     </div>
   );
 };

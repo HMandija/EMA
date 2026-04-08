@@ -1,18 +1,14 @@
-# EMA — Ersid Mandija Architecture Portfolio
+# EMA — Ersid Mandija Architecture
 
-This is the official digital portfolio for **EMA (Ersid Mandija Architecture)**. The platform is designed with a minimalist aesthetic to showcase architectural projects using a premium, modern web experience.
+EMA is an architecture portfolio web application built for Ersid Mandija Architecture. It allows clients to explore architectural projects, learn about the studio, contact the team, and offers a private admin panel for managing content directly from the browser.
 
-## 🚀 Technologies Used
+## Technologies
 
-- **React.js (Vite)** – For a high-performance, seamless user experience.
-- **Tailwind CSS** – Used for clean, responsive, and utility-first styling.
-- **Framer Motion** – For elegant page transitions and UI animations.
-- **EmailJS** – Powering the contact form functionality with secure, serverless delivery.
-- **React Router** – Handling dynamic navigation between Projects, Profile, and Contact pages.
-
-## ✨ Key Features
-
-- **Dynamic Video Logo** – A custom 5-second motion logo integrated into the navigation bar.
-- **Responsive Architecture** – Fully optimized for mobile, tablet, and desktop viewports.
-- **Project Showcase** – A clean grid-based gallery with dedicated detail pages for each architectural work.
-- **CI/CD Integrated** – Automated deployment pipeline via GitHub and Vercel.
+- **React + Vite** — Frontend framework and build tool
+- **Tailwind CSS** — Utility-first styling
+- **Framer Motion** — Animations and page transitions
+- **Firebase** (Auth + Firestore) — Authentication and database
+- **Cloudinary** — Image storage and delivery
+- **EmailJS** — Contact form email delivery
+- **React Router** — Client-side navigation
+- **Vercel** — Hosting and deployment
