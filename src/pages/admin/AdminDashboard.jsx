@@ -2,7 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../firebase";
-import { FolderOpen, Users, MessageSquare, ExternalLink, Database } from "lucide-react";
+import {
+  FolderOpen,
+  Users,
+  MessageSquare,
+  ExternalLink,
+  Database,
+  BarChart3,
+} from "lucide-react";
 import AdminLayout from "./AdminLayout";
 import { seedProjects, seedTeam } from "../../utils/seedFirestore";
 
@@ -22,12 +29,15 @@ const AdminDashboard = () => {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const [projectsSnap, teamSnap, messagesSnap, unreadSnap] = await Promise.all([
-        getDocs(collection(db, "projects")),
-        getDocs(collection(db, "team")),
-        getDocs(collection(db, "messages")),
-        getDocs(query(collection(db, "messages"), where("read", "==", false))),
-      ]);
+      const [projectsSnap, teamSnap, messagesSnap, unreadSnap] =
+        await Promise.all([
+          getDocs(collection(db, "projects")),
+          getDocs(collection(db, "team")),
+          getDocs(collection(db, "messages")),
+          getDocs(
+            query(collection(db, "messages"), where("read", "==", false)),
+          ),
+        ]);
       setStats({
         projects: projectsSnap.size,
         team: teamSnap.size,
@@ -68,6 +78,13 @@ const AdminDashboard = () => {
       desc: stats.unread > 0 ? `${stats.unread} unread` : "All caught up",
       highlight: stats.unread > 0,
     },
+    {
+      label: "Analytics",
+      value: "📊",
+      icon: BarChart3,
+      link: `${BASE}/analytics`,
+      desc: "View traffic",
+    },
   ];
 
   return (
@@ -92,18 +109,25 @@ const AdminDashboard = () => {
               className="group border border-zinc-800 hover:border-zinc-600 bg-zinc-950 p-6 rounded transition-all duration-300"
             >
               <div className="flex items-start justify-between mb-4">
-                <Icon size={16} className="text-zinc-500 group-hover:text-white transition-colors" />
+                <Icon
+                  size={16}
+                  className="text-zinc-500 group-hover:text-white transition-colors"
+                />
                 {highlight && (
                   <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
                 )}
               </div>
-              <p className={`text-2xl font-light mb-1 ${loading ? "text-zinc-700" : "text-white"}`}>
+              <p
+                className={`text-2xl font-light mb-1 ${loading ? "text-zinc-700" : "text-white"}`}
+              >
                 {loading ? "—" : value}
               </p>
               <p className="text-[9px] uppercase tracking-widest text-zinc-500">
                 {label}
               </p>
-              <p className={`text-[9px] mt-1 ${highlight ? "text-red-400" : "text-zinc-700"}`}>
+              <p
+                className={`text-[9px] mt-1 ${highlight ? "text-red-400" : "text-zinc-700"}`}
+              >
                 {desc}
               </p>
             </Link>
@@ -128,6 +152,12 @@ const AdminDashboard = () => {
             >
               View Messages
             </Link>
+            <Link
+              to={`${BASE}/analytics`}
+              className="text-[10px] uppercase tracking-wider border border-zinc-700 text-zinc-300 px-4 py-2 hover:border-white hover:text-white transition-all duration-200"
+            >
+              📊 Analytics
+            </Link>
             <a
               href="/"
               target="_blank"
@@ -147,8 +177,9 @@ const AdminDashboard = () => {
               ⚡ First time? Import your data
             </p>
             <p className="text-zinc-500 text-[10px] mb-4">
-              Click the buttons below to transfer projects and team data from static files into Firestore.
-              After that, upload photos from the Admin Panel.
+              Click the buttons below to transfer projects and team data from
+              static files into Firestore. After that, upload photos from the
+              Admin Panel.
             </p>
             <div className="flex flex-wrap gap-3">
               <button

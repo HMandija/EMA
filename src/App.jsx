@@ -19,6 +19,7 @@ import AdminProjects from "./pages/admin/AdminProjects";
 import AdminTeam from "./pages/admin/AdminTeam";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminContactInfo from "./pages/admin/AdminContactInfo";
+import Analytics from "./pages/admin/Analytics";
 
 const ADMIN_PATH = import.meta.env.VITE_ADMIN_PATH || "/ema-admin";
 
@@ -30,8 +31,8 @@ const PublicSite = ({ theme, toggleTheme, isLoading, setIsLoading }) => {
         isLoading
           ? "bg-black"
           : theme === "dark"
-          ? "bg-black text-white"
-          : "bg-white text-black"
+            ? "bg-black text-white"
+            : "bg-white text-black"
       } min-h-screen transition-colors duration-500`}
     >
       <AnimatePresence mode="wait">
@@ -71,7 +72,7 @@ function App() {
     localStorage.getItem("theme") ||
       (window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
-        : "light")
+        : "light"),
   );
 
   useEffect(() => {
@@ -133,6 +134,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <AdminContactInfo />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path={`${ADMIN_PATH}/analytics`}
+            element={
+              <ProtectedRoute>
+                <Analytics />
               </ProtectedRoute>
             }
           />
