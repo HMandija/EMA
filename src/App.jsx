@@ -20,6 +20,7 @@ import AdminTeam from "./pages/admin/AdminTeam";
 import AdminMessages from "./pages/admin/AdminMessages";
 import AdminContactInfo from "./pages/admin/AdminContactInfo";
 import Analytics from "./pages/admin/Analytics";
+import { trackVisitor } from "./utils/trackVisitor";
 
 const ADMIN_PATH = import.meta.env.VITE_ADMIN_PATH || "/ema-admin";
 
@@ -67,6 +68,13 @@ const PublicSite = ({ theme, toggleTheme, isLoading, setIsLoading }) => {
 function App() {
   const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
+
+  useEffect(() => {
+    const isAdminRoute = location.pathname.startsWith(ADMIN_PATH);
+    if (!isAdminRoute) {
+      trackVisitor(location.pathname);
+    }
+  }, [location.pathname]);
 
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ||
